@@ -18,6 +18,8 @@ class BaseModel:
             args (list): A list of arguments
             kwargs (dict): Key-value pair arguments
         """
+        from models import storage
+
         for key, value in kwargs.items():
             if key != "__class__":
                 if key == "created_at":
@@ -34,6 +36,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -45,7 +48,10 @@ class BaseModel:
 
     def save(self):
         """Updates the attribute 'update_at' with the current datetime"""
+        from models import storage
+
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
